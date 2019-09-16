@@ -6,23 +6,23 @@ LocusZoom.Data.PheGET = LocusZoom.KnownDataSources.extend('PheWASLZ', 'PheGET', 
         //      state.start, etc)
         return this.url;
     }
-});
+});// What does this part do?
 
 
-function makePhewasPlot(chrom, pos, selector) {
+function makePhewasPlot(chrom, pos, selector) {// add a parameter geneid
     var dataSources= new LocusZoom.DataSources();
     const apiBase = "https://portaldev.sph.umich.edu/api/v1/";
     dataSources
     .add("phewas", ['PheGET', {  // TODO: Override URL generation
         url: `/api/variant/${chrom}_${pos}/`,
-    }]);
+    }]);// what does dataSources look like inside? a list of dictionaries?
 
     // Define the layout
-    var layout = LocusZoom.Layouts.get("plot", "standard_phewas", {
+    var layout = LocusZoom.Layouts.get("plot", "standard_phewas", {// where does these names come from?
         responsive_resize: 'width_only',
         panels: [
             LocusZoom.Layouts.get('panel', 'phewas', {
-                unnamespaced: true,
+                unnamespaced: true,// what does this mean?
                 proportional_height: 1.0,
                 data_layers: [
                     // The data layer config is pretty sensitive to field names, so a bunch of stuff needs to be
@@ -35,16 +35,16 @@ function makePhewasPlot(chrom, pos, selector) {
                             '{{namespace[phewas]}}id', '{{namespace[phewas]}}pvalue',
                             '{{namespace[phewas]}}gene_id', '{{namespace[phewas]}}tissue',
                             '{{namespace[phewas]}}system', '{{namespace[phewas]}}symbol',
-                        ];
+                        ];// this looks like a jinja template but the key value is outside the curly bracket?
                         base.x_axis.category_field = '{{namespace[phewas]}}system';
-                        base.y_axis.field = '{{namespace[phewas]}}pvalue|neglog10';
+                        base.y_axis.field = '{{namespace[phewas]}}pvalue|neglog10';// what does middle slash do
                         base.color.field =  '{{namespace[phewas]}}system';
                         base.tooltip.html = `
 <strong>Gene:</strong> {{{{namespace[phewas]}}gene_id|htmlescape}}<br>
 <strong>Symbol:</strong> {{{{namespace[phewas]}}symbol|htmlescape}}<br>
 <strong>Tissue:</strong> {{{{namespace[phewas]}}tissue|htmlescape}}<br>
 <strong>P-value:</strong> {{{{namespace[phewas]}}pvalue|neglog10|htmlescape}}<br>
-<strong>System:</strong> {{{{namespace[phewas]}}system|htmlescape}}<br>`;
+<strong>System:</strong> {{{{namespace[phewas]}}system|htmlescape}}<br>`;// how can I find functions triggered by tooltip
                         base.label.text = '{{{{namespace[phewas]}}gene_id}}';
                         base.label.filters[0].field = '{{namespace[phewas]}}pvalue|neglog10';
                         return base;
@@ -58,7 +58,7 @@ function makePhewasPlot(chrom, pos, selector) {
     });
 
     // Generate the plot
-    var plot = LocusZoom.populate("#plot", dataSources, layout);
+    var plot = LocusZoom.populate(selector, dataSources, layout);
     return [plot, dataSources];
 }
 
@@ -136,3 +136,25 @@ function groupByThing(plot, thing) {
 
     plot.applyState();
 }
+
+$(document).ready(function(){
+    const [plot, datasources] = makePhewasPlot($('#chrom').text(), $('#pos').text(), '#plot');
+    $('#tissue').click(function(event){
+        event.preventDefault();
+        groupByThing(plot,'tissue');
+    });
+    $('#system').click(function(event){
+        event.preventDefault();
+        groupByThing(plot,'system');
+    });
+    $('#symbol').click(function(event){
+        event.preventDefault();
+        groupByThing(plot,'symbol');
+    });
+    $('#debug').click(function(event){
+        event.preventDefault();
+        for(p in plot) {
+            console.log (p, plot[p]);
+        }
+    });
+});

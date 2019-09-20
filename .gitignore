@@ -3,3 +3,7 @@ venv/
 pheget/__pycache__/
 # The backend data may live in large tabix files that we don't want to commit to github
 data/
+node_modules/
+pheget/api/__pycache__/
+
+

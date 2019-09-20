@@ -1,0 +1,23 @@
+{
+  "name": "pheget",
+  "version": "1.0.0",
+  "description": "Frontend for Phewas plot rendering",
+  "main": "./pheget/static/js/phewas_scatter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skybullbobby/pheget.git"
+  },
+  "author": "Andy Boughton, Alan Kwong, Mukai Wang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skybullbobby/pheget/issues"
+  },
+  "homepage": "https://github.com/skybullbobby/pheget#readme",
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "jquery": "^3.4.1"
+  }
+}
